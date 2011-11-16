@@ -9,7 +9,7 @@ if(isset($_REQUEST['submit'])):
  if(!wp_verify_nonce($_POST['generate_key'],'quiz_action_generate_key')) die("Nonce verification failed");
  
     $num= $this ->generate_keys();
-    $message ="$num keys were generate successfully";
+    $message ="$num key(s) were generated successfully";
 endif;
  $message = isset($message)? $message:'';
  
