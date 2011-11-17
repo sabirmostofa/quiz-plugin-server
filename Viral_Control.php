@@ -22,6 +22,7 @@ class Viral_Control {
         add_action('delete_user', array($this, 'delete_from_table'));
         add_shortcode('vc_activation_key', array($this, 'key_shortcode'));
         add_shortcode('vc_activation_mail', array($this, 'mail_shortcode'));
+        add_shortcode('vc_activation_count', array($this, 'count_shortcode'));
         register_activation_hook(__FILE__, array($this, 'create_table'));
     }
     function  delete_from_table($id){
@@ -57,6 +58,20 @@ class Viral_Control {
         if (!$user_id)
             return 'Not Available';
         return $user->user_email;
+    }
+    function count_shortcode() {
+        global $wpdb;
+        $user = wp_get_current_user();
+        $user_id = $user->ID;
+        if (!$user_id)
+            return 'Not Available';
+        $mail =  $user->user_email;
+        $activated = $wpdb->get_var("select activate_count from {$this->table} where email='$mail'");
+         $limit_license= get_option('vc_license_limit')?  get_option('vc_license_limit'):0;
+         
+        $left = $limit_license-$activated;
+        $ret = ($left>0)?$left:0;
+        return $ret;
     }
 
     function get_key($mail) {
@@ -104,7 +119,7 @@ class Viral_Control {
                     header('Content-Type: text');
                     $act_count=$wpdb->get_var("select activate_count from {$this->table} where email='$mail'");
                     $limit_license= get_option('vc_license_limit')?  get_option('vc_license_limit'):0;
-                    if($act_count <= $limit_license){
+                    if($act_count <  $limit_license){
                         $wpdb->update($this->table, array('activate_count'=> ++$act_count), array('email'=>$mail) );
                           exit('proceed');                      
                     }

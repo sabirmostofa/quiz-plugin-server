@@ -25,7 +25,7 @@ endif;
 ?>
 <div class="wrap">
     <div id="generate-key" style="width:400px;margin:50px auto;text-align: center">
-        <b>Shortcode Available:</b> [vc_activation_key] ,  [vc_activation_mail]
+        <b>Shortcode Available:</b> [vc_activation_key] ,  [vc_activation_mail] ,[vc_activation_count] 
         <br/>
         <br/>
         <h2>Generate activation keys for all users</h2>
